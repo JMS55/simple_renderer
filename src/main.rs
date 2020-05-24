@@ -44,7 +44,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         mip_level_count: 1,
         sample_count: 1,
         dimension: TextureDimension::D2,
-        format: TextureFormat::Bgra8UnormSrgb,
+        format: TextureFormat::Rgba8Uint,
         usage: TextureUsage::STORAGE
             | TextureUsage::COPY_DST
             | TextureUsage::COPY_SRC
@@ -99,7 +99,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         }),
         primitive_topology: PrimitiveTopology::TriangleList,
         color_states: &[ColorStateDescriptor {
-            format: TextureFormat::Bgra8UnormSrgb,
+            format: TextureFormat::Rgba8Uint,
             color_blend: BlendDescriptor::REPLACE,
             alpha_blend: BlendDescriptor::REPLACE,
             write_mask: ColorWrite::ALL,
@@ -130,7 +130,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Bgra8UnormSrgb,
+                        format: TextureFormat::Rgba8Uint,
                         readonly: true,
                     },
                 },
@@ -140,7 +140,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Bgra8UnormSrgb,
+                        format: TextureFormat::Rgba8Uint,
                         readonly: true,
                     },
                 },
@@ -150,7 +150,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Bgra8UnormSrgb,
+                        format: TextureFormat::Rgba8Uint,
                         readonly: false,
                     },
                 },
