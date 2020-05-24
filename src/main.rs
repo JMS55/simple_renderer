@@ -32,6 +32,16 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         .await;
     let mut screen_size = window.inner_size();
 
+    // Setup the swapchain
+    let mut swap_chain_descriptor = SwapChainDescriptor {
+        usage: TextureUsage::OUTPUT_ATTACHMENT,
+        format: TextureFormat::Bgra8UnormSrgb,
+        width: screen_size.width,
+        height: screen_size.height,
+        present_mode: PresentMode::Mailbox,
+    };
+    let mut swap_chain = device.create_swap_chain(&surface, &swap_chain_descriptor);
+
     // Setup textures
     let mut texture_descriptor = TextureDescriptor {
         label: None,
@@ -44,7 +54,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         mip_level_count: 1,
         sample_count: 1,
         dimension: TextureDimension::D2,
-        format: TextureFormat::Rgba8Uint,
+        format: TextureFormat::Bgra8UnormSrgb,
         usage: TextureUsage::STORAGE
             | TextureUsage::COPY_DST
             | TextureUsage::COPY_SRC
@@ -57,16 +67,6 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
     let mut pink_simple_texture = device
         .create_texture(&texture_descriptor)
         .create_default_view();
-
-    // Setup the swapchain
-    let mut swap_chain_descriptor = SwapChainDescriptor {
-        usage: TextureUsage::OUTPUT_ATTACHMENT,
-        format: TextureFormat::Bgra8UnormSrgb,
-        width: screen_size.width,
-        height: screen_size.height,
-        present_mode: PresentMode::Mailbox,
-    };
-    let mut swap_chain = device.create_swap_chain(&surface, &swap_chain_descriptor);
 
     // Setup the default renderer
     let default_vertex_shader = include_bytes!("../default_renderer_vert.spv");
@@ -99,7 +99,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         }),
         primitive_topology: PrimitiveTopology::TriangleList,
         color_states: &[ColorStateDescriptor {
-            format: TextureFormat::Rgba8Uint,
+            format: TextureFormat::Bgra8UnormSrgb,
             color_blend: BlendDescriptor::REPLACE,
             alpha_blend: BlendDescriptor::REPLACE,
             write_mask: ColorWrite::ALL,
@@ -130,7 +130,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Rgba8Uint,
+                        format: TextureFormat::Bgra8UnormSrgb,
                         readonly: true,
                     },
                 },
@@ -140,7 +140,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Rgba8Uint,
+                        format: TextureFormat::Bgra8UnormSrgb,
                         readonly: true,
                     },
                 },
@@ -150,7 +150,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Rgba8Uint,
+                        format: TextureFormat::Bgra8UnormSrgb,
                         readonly: false,
                     },
                 },
