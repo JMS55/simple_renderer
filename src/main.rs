@@ -5,6 +5,7 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::Window;
 
 fn main() {
+    env_logger::init();
     let event_loop = EventLoop::new();
     let window = Window::new(&event_loop).unwrap();
     futures::executor::block_on(run(event_loop, window));
@@ -54,12 +55,12 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         mip_level_count: 1,
         sample_count: 1,
         dimension: TextureDimension::D2,
-        format: TextureFormat::Bgra8UnormSrgb,
+        format: TextureFormat::Rgba8Unorm,
         usage: TextureUsage::STORAGE
-            | TextureUsage::COPY_DST
+            | TextureUsage::SAMPLED
             | TextureUsage::COPY_SRC
-            | TextureUsage::OUTPUT_ATTACHMENT
-            | TextureUsage::SAMPLED, // TODO: Unsure what exactly is needed
+            | TextureUsage::COPY_DST
+            | TextureUsage::OUTPUT_ATTACHMENT,
     };
     let mut default_texture = device
         .create_texture(&texture_descriptor)
@@ -99,7 +100,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         }),
         primitive_topology: PrimitiveTopology::TriangleList,
         color_states: &[ColorStateDescriptor {
-            format: TextureFormat::Bgra8UnormSrgb,
+            format: TextureFormat::Rgba8Unorm,
             color_blend: BlendDescriptor::REPLACE,
             alpha_blend: BlendDescriptor::REPLACE,
             write_mask: ColorWrite::ALL,
@@ -130,7 +131,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Bgra8UnormSrgb,
+                        format: TextureFormat::Rgba8Unorm,
                         readonly: true,
                     },
                 },
@@ -140,7 +141,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Bgra8UnormSrgb,
+                        format: TextureFormat::Rgba8Unorm,
                         readonly: true,
                     },
                 },
@@ -150,7 +151,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     ty: BindingType::StorageTexture {
                         dimension: TextureViewDimension::D2,
                         component_type: TextureComponentType::Uint,
-                        format: TextureFormat::Bgra8UnormSrgb,
+                        format: TextureFormat::Rgba8Unorm,
                         readonly: false,
                     },
                 },
