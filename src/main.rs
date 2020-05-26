@@ -62,12 +62,10 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
             | TextureUsage::COPY_DST
             | TextureUsage::OUTPUT_ATTACHMENT,
     };
-    let mut default_texture = device
-        .create_texture(&texture_descriptor)
-        .create_default_view();
-    let mut pink_simple_texture = device
-        .create_texture(&texture_descriptor)
-        .create_default_view();
+    let mut default_texture = device.create_texture(&texture_descriptor);
+    let mut pink_simple_texture = device.create_texture(&texture_descriptor);
+    let default_texture_view = default_texture.create_default_view();
+    let pink_simple_texture_view = pink_simple_texture.create_default_view();
 
     // Setup the default renderer
     let default_vertex_shader = include_bytes!("../default_renderer_vert.spv");
@@ -163,15 +161,15 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         bindings: &[
             Binding {
                 binding: 0,
-                resource: BindingResource::TextureView(&default_texture),
+                resource: BindingResource::TextureView(&default_texture_view),
             },
             Binding {
                 binding: 1,
-                resource: BindingResource::TextureView(&default_texture),
+                resource: BindingResource::TextureView(&default_texture_view),
             },
             Binding {
                 binding: 2,
-                resource: BindingResource::TextureView(&pink_simple_texture),
+                resource: BindingResource::TextureView(&pink_simple_texture_view),
             },
         ],
         label: None,
@@ -233,7 +231,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         bindings: &[
             Binding {
                 binding: 0,
-                resource: BindingResource::TextureView(&pink_simple_texture),
+                resource: BindingResource::TextureView(&pink_simple_texture_view),
             },
             Binding {
                 binding: 1,
@@ -299,12 +297,8 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
 
                 texture_descriptor.size.width = screen_size.width;
                 texture_descriptor.size.height = screen_size.height;
-                default_texture = device
-                    .create_texture(&texture_descriptor)
-                    .create_default_view();
-                pink_simple_texture = device
-                    .create_texture(&texture_descriptor)
-                    .create_default_view();
+                default_texture = device.create_texture(&texture_descriptor);
+                pink_simple_texture = device.create_texture(&texture_descriptor);
             }
 
             // Rendering
@@ -318,7 +312,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                     let mut default_render_pass =
                         encoder.begin_render_pass(&RenderPassDescriptor {
                             color_attachments: &[RenderPassColorAttachmentDescriptor {
-                                attachment: &default_texture,
+                                attachment: &default_texture_view,
                                 resolve_target: None,
                                 load_op: LoadOp::Clear,
                                 store_op: StoreOp::Store,
