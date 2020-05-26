@@ -9,7 +9,7 @@ void main() {
     ivec2 texture_size = imageSize(pixels_texture);
     ivec2 index = ivec2(gl_GlobalInvocationID.x, texture_size.y - 1 - gl_GlobalInvocationID.y);
 
-    vec4 color = vec4(145.0 / 255.0, 5.0 / 255.0, 101.0 / 255.0, 1.0);
+    vec4 color = vec4(145, 5, 101, 255) / 255;
     if (index.x > texture_size.x / 2) {
         color.rgb = imageLoad(previous_pass, index).rgb;
     }
