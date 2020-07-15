@@ -158,7 +158,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
             ],
             label: None,
         });
-    let pink_simple_bind_group = device.create_bind_group(&BindGroupDescriptor {
+    let mut pink_simple_bind_group = device.create_bind_group(&BindGroupDescriptor {
         layout: &pink_simple_bind_group_layout,
         bindings: &[
             Binding {
@@ -228,7 +228,7 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
         ],
         label: None,
     });
-    let copy_bind_group = device.create_bind_group(&BindGroupDescriptor {
+    let mut copy_bind_group = device.create_bind_group(&BindGroupDescriptor {
         layout: &copy_bind_group_layout,
         bindings: &[
             Binding {
@@ -305,6 +305,39 @@ async fn run(event_loop: EventLoop<()>, window: Window) {
                 pink_simple_texture = device
                     .create_texture(&texture_descriptor)
                     .create_default_view();
+
+                pink_simple_bind_group = device.create_bind_group(&BindGroupDescriptor {
+                    layout: &pink_simple_bind_group_layout,
+                    bindings: &[
+                        Binding {
+                            binding: 0,
+                            resource: BindingResource::TextureView(&default_texture),
+                        },
+                        Binding {
+                            binding: 1,
+                            resource: BindingResource::TextureView(&default_texture),
+                        },
+                        Binding {
+                            binding: 2,
+                            resource: BindingResource::TextureView(&pink_simple_texture),
+                        },
+                    ],
+                    label: None,
+                });
+                copy_bind_group = device.create_bind_group(&BindGroupDescriptor {
+                    layout: &copy_bind_group_layout,
+                    bindings: &[
+                        Binding {
+                            binding: 0,
+                            resource: BindingResource::TextureView(&pink_simple_texture),
+                        },
+                        Binding {
+                            binding: 1,
+                            resource: BindingResource::Sampler(&copy_sampler),
+                        },
+                    ],
+                    label: None,
+                });
             }
 
             // Rendering
